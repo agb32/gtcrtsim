@@ -31,6 +31,7 @@ python doBasicPoke.py
 #After doing this, you can close the loop (an optional gain parameter
 #can be supplied, default is 0.5):
 python closeLoop.py
+(or, e.g. python closeLoop.py 0.1)
 
 #To open the loop:
 python openLoop.py
