@@ -103,7 +103,7 @@ ncamThreads=numpy.ones((ncam,),numpy.int32)*4 # Array spcifying the number of Th
 # switchRequested [11.15] defined directly in "control"
 
 # actuators [11.16]
-actuators=None #(numpy.random.random((3,52))*1000).astype("H"),#None,#an array of actuator values.
+actuators=numpy.ones((nacts,),numpy.float32)*32768 #(numpy.random.random((3,52))*1000).astype("H"),#None,#an array of actuator values.
 
 #threadAffinity  [11.17]
 threadAffinity=None 
@@ -252,10 +252,10 @@ centCalBounds=None# [11.54.13]
 decayFactor=None #used in libreconmvm.so [11.55.1]
 reconstructMode="simple" #string with value "simple", "truth" , "open" or "offfset" [11.55.3]
 ncents=subapFlag.sum()*2
-v0=numpy.ones((nacts,),"f")*32768 #initial voltages [11.55.5]
+v0=numpy.zeros((nacts,),"f") #initial voltages [11.55.5]
 rmx=numpy.zeros((nacts,ncents)).astype("f")#FITS.Read("rmxRTC.fits")[1].transpose().astype("f") [11.55.6]
 E=numpy.zeros((nacts,nacts),"f") # the E matrix (Basden 2012) [11.55.7]
-gain=numpy.ones((nacts,),"f")#actuator gain, specifique for each [11.55.8]
+gain=numpy.ones((nacts,),"f")*0.1#actuator gain, specifique for each [11.55.8]
 #end MVM reconstruction interface
 
 # Typical mirror interfaces [11.56]
@@ -293,7 +293,7 @@ control={
     "printTime":0,#whether to print time/Hz
     "ncamThreads":ncamThreads,
     "switchRequested":0,#this is the only item in a currently active buffer that can be changed...
-    "actuators":None,#(numpy.random.random((3,52))*1000).astype("H"),#None,#an array of actuator values.
+    "actuators":actuators,#(numpy.random.random((3,52))*1000).astype("H"),#None,#an array of actuator values.
     "threadAffinity":threadAffinity,
     "threadPriority":threadPriority,
     "delay":delay,

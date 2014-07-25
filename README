@@ -1,0 +1,66 @@
+To run:
+
+#Start the simulation, which then waits for darc to connect.
+python gtcsim.py
+
+#Now start darc
+darccontrol configGTCAOSim.py
+
+#Start a darcplot, and look at things...
+darcplot
+
+#There are some scripts that can be used:
+#To turn off the atmosphere:
+python setCalibrationMode.py 1
+
+#And to turn it back on again:
+python setCalibrationMode.py 0
+
+#To set the WFS flux (to 100 photons/subap):
+python setFlux.py 100
+
+
+#To take reference centroids (do this in calibration mode, with high flux):
+python takeRefCentroids.py
+
+#To take a control matrix (again, calibration mode, high flux):
+python doBasicPoke.py
+
+#Set out of calibration mode...
+
+#After doing this, you can close the loop (an optional gain parameter
+#can be supplied, default is 0.5):
+python closeLoop.py
+
+#To open the loop:
+python openLoop.py
+
+
+
+
+
+To view science PSFs, you can use the simulation tools:
+simctrl.py
+
+There is a button "connect" - enter "9000" in the box next to this,
+and then click it.
+
+Then click "Get plots".
+
+Scroll down to the bottom and click the "Zero science"
+button.  This resets the long exposure integration.
+
+Scroll up slightly until you see "science_b".  Expand this item, and select
+"Instantaneous Image".  Then you will see the AO corrected
+instantaneous PSF, at 1650nm.  The "long PSF" item will show the
+integrated PSF.  "Science params" item shows various parameters of the
+integrated PSF (Strehl etc).
+
+"science_buncorr" is the uncorrected PSF.
+
+science_a and science_auncorr are PSFs at 700nm.
+
+My quick tests give H-band Strehls of about 10%, though I've not done
+any gain optimisation, or any investigations... it should be possible
+to do a lot better.
+
