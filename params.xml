@@ -49,23 +49,25 @@ spotpsf=util.centroid.createAiryDisc(wfs_nfft,wfs_nfft/8.,0.5,0.5).astype(numpy.
 <var name="strList" type="eval" value="[0.7,0.2,0.1][:nlayers]"/>
 <var name="dirn" type="eval" value="[0.,330.,135.][:nlayers]"/>
 <var name="speed" type="eval" value="[7.5 if (this.batchno)%3!=2 else 10.,12.5 if (this.batchno)%3!=2 else 15.,15. if (this.batchno)%3!=2 else 17.5][:nlayers]"/>
-<var name="seed" type="eval" value="[11,12,13][:nlayers]"/>
+<var name="layerseed" type="eval" value="[11,12,13][:nlayers]"/>
+<var name="seed" type="i" value="1"/>
 <var name="atmosGeom" type="code">
 from util.atmos import geom,layer,source
 d={}
 for i in range(nlayers):
- d["L%d"%i]=layer(hlist[i],dirn[i],speed[i],strList[i],seed[i])
+ d["L%d"%i]=layer(hlist[i],dirn[i],speed[i],strList[i],layerseed[i])
 atmosGeom=geom(d,
                [
 	        source('a',0.,0.,-1,wfs_nsubx,wfslam,reconList=["darc"]),
-	        source('b',0.,0.,-1,None,sciLam),
+	        source('b',0.,0.,-1,None,sciLam,phslam=wfslam),
+	        source('c',10.,0.,-1,None,sciLam),
 	       ],
 	       ntel,npup,telDiam,r0,l0
 	      )
 </var>
 <var name="dmObj" comment="dm object" type="code">
 from util.dm import dmOverview,dmInfo,calcActuators
-all=['a','b']
+all=['a','b','c']
 actoffset=0.
 pokespacing=None
 actSpacing=None

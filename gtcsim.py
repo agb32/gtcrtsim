@@ -48,13 +48,10 @@ if ctrl.rank==0:
     PredarcList.append(predarc.Predarc({"a":wfscentList[0],},ctrl.config,args={},idstr=None))
     DarcList.append(science.darcsim.Darc({"a":PredarcList[0],},ctrl.config,args={},idstr="darc"))
     scienceList.append(science.science.science(dmList[1],ctrl.config,args={},idstr="a"))
-    infAtmosList.append(science.infAtmos.infAtmos({"L0":infScrnList[0],"L1":infScrnList[1],"L2":infScrnList[2],},ctrl.config,args={},idstr="b"))
-    scienceList.append(science.science.science(infAtmosList[1],ctrl.config,args={},idstr="buncorr"))
-    dmList.append(dmList[0].addNewIdObject({"1":infAtmosList[1],"2":PostdarcList[0],},"ttb"))
-    dmList.append(dmList[1].addNewIdObject({"1":dmList[2],"2":PostdarcList[0],},"dmb"))
-    scienceList.append(science.science.science(dmList[3],ctrl.config,args={},idstr="b"))
+    scienceList.append(science.science.science(dmList[1],ctrl.config,args={},idstr="b"))
+    scienceList.append(science.science.science(infAtmosList[0],ctrl.config,args={},idstr="buncorr"))
     PostdarcList[0].newParent(DarcList[0],None)
-    execOrder=[PostdarcList[0],infScrnList[0],infScrnList[1],infScrnList[2],infAtmosList[0],scienceList[0],dmList[0],dmList[1],wfscentList[0],PredarcList[0],DarcList[0],scienceList[1],infAtmosList[1],scienceList[2],dmList[2],dmList[3],scienceList[3],]
+    execOrder=[PostdarcList[0],infScrnList[0],infScrnList[1],infScrnList[2],infAtmosList[0],scienceList[0],dmList[0],dmList[1],wfscentList[0],PredarcList[0],DarcList[0],scienceList[1],scienceList[2],scienceList[3],]
     ctrl.mainloop(execOrder)
 print "Simulation finished..."
 #Add any personal code after this, and it will not get overwritten

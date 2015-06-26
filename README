@@ -2,16 +2,33 @@ To run:
 
 #Start the simulation, which then waits for darc to connect.
 python gtcsim.py
+(or if you want a faster simulation, use python gtcsim1sci.py - which
+has only 1 science PSF, rather than 4).
 
 #Now start darc
-darccontrol configGTCAOSim.py
+darccontrol configGTCAOSim.py -o
+
+The simulation and darc run at about 4Hz on my laptop (darc alone
+reaches over 1000Hz - the simulation slows things down a lot).
 
 #Start a darcplot, and look at things...
 darcplot
+(right click, click the Subscribe button, and set the relevant
+decimation to 1, otherwise it will update too slowly in simulation mode).
+
+#We will do the brightest pixel background subtraction, and not use a
+# flat field.
+darcmagic set useBrightest -value=-20
+
+#Note, you could of course explore the different subtraction
+ algorithms, levels, etc...
 
 #There are some scripts that can be used:
 #To turn off the atmosphere:
-python setCalibrationMode.py 1
+python setCalibrationMode.py 1      
+#(this may print an error in the
+#simulation window - ignore it - its just that the script has finished
+#before the simulation had time to return anything)
 
 #And to turn it back on again:
 python setCalibrationMode.py 0
@@ -19,14 +36,22 @@ python setCalibrationMode.py 0
 #To set the WFS flux (to 100 photons/subap):
 python setFlux.py 100
 
+#To set the WFS flux (to a billion photons/subap):
+python setFlux.py 1e9
+
+
 
 #To take reference centroids (do this in calibration mode, with high flux):
-python takeRefCentroids.py
+python takeRefSlopes.py
 
 #To take a control matrix (again, calibration mode, high flux):
 python doBasicPoke.py
+#For a real sytem, you'd probably want a more advanced way of poking.
 
-#Set out of calibration mode...
+
+#Set out of calibration mode... and turn down the flux.
+python setCalibrationMode.py 0
+python setFlux.py 100
 
 #After doing this, you can close the loop (an optional gain parameter
 #can be supplied, default is 0.5):
@@ -61,7 +86,35 @@ integrated PSF (Strehl etc).
 
 science_a and science_auncorr are PSFs at 700nm.
 
-My quick tests give H-band Strehls of about 10%, though I've not done
+My quick tests give H-band Strehls of about 5-10%, though I've not done
 any gain optimisation, or any investigations... it should be possible
-to do a lot better.
+to do a lot better.  It takes a long time for the averaging of long
+exposure PSF to give steady results... (i.e. it has to do enough iterations).
 
+To change conditioning of the control matrix, can use eg:
+python makeRecon.py 0.1  (or any value <1).  
+Then remember to "Zero science"
+Of course, for an on-sky system, you would probably want a better
+method for control matrix generation - a minimum variance
+reconstructor or something.
+
+
+
+So stop:
+darcmagic stop -c
+
+Simulation will then wait for a new darc to reconnect - or you can
+Ctrl-C it.
+
+
+Useful commands:
+darcmagic status
+darcmagic time 10
+
+
+
+simsetup.py gtcsim.xml to modify the simulation.  e.g....
+
+python gtcsim10layer.py params10layer.xml
+or
+python gtcsim1sci.py params.xml   (which runs faster)

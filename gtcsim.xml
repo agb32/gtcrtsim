@@ -1,9 +1,8 @@
 <aosim>
 <simSetup>
-<simulationObject cpu="(1, 1)" import="science.infScrn" object="infScrn" pos="83,61" tag="1" shortname="infScrn" pixmap="infScrn.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[3, 4]" connectfrom="[]" textcol="red" idstr="L$">
+<simulationObject cpu="(1, 1)" import="science.infScrn" object="infScrn" pos="87,74" tag="1" shortname="infScrn" pixmap="infScrn.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[3]" connectfrom="[]" textcol="red" idstr="L$">
 <lines>
 [
-[],
 [],
 ]
 </lines>
@@ -18,28 +17,10 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.infAtmos" object="infAtmos" pos="92,162" tag="3" shortname="atmos" pixmap="infAtmos.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[13, 21]" connectfrom="[1]" textcol="red" idstr="a">
+<simulationObject cpu="(1, 1)" import="science.infAtmos" object="infAtmos" pos="96,175" tag="3" shortname="atmos" pixmap="infAtmos.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[13, 21, 14]" connectfrom="[1]" textcol="red" idstr="a">
 <lines>
 [
 [],
-[],
-]
-</lines>
-<endlines>
-[
-[],
-]
-</endlines>
-<parentNames>
-['L$']
-</parentNames>
-<sharedTo>
-[]
-</sharedTo>
-</simulationObject>
-<simulationObject cpu="(1, 1)" import="science.infAtmos" object="infAtmos" pos="251,158" tag="4" shortname="atmos" pixmap="infAtmos.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[14, 22]" connectfrom="[1]" textcol="red" idstr="b">
-<lines>
-[
 [],
 [],
 ]
@@ -56,9 +37,10 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.xinterp_dm" object="dm" pos="93,314" tag="7" shortname="xdm" pixmap="xinterp_dm.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[9, 15]" connectfrom="[21, 28]" textcol="red" idstr="dma">
+<simulationObject cpu="(1, 1)" import="science.xinterp_dm" object="dm" pos="97,327" tag="7" shortname="xdm" pixmap="xinterp_dm.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[9, 15, 16]" connectfrom="[21, 28]" textcol="red" idstr="dma">
 <lines>
 [
+[],
 [],
 [],
 ]
@@ -66,17 +48,17 @@
 <endlines>
 [
 [],
-[(36, 637), (41, 287)],
+[(40, 650), (45, 300)],
 ]
 </endlines>
 <parentNames>
 ['', '']
 </parentNames>
 <sharedTo>
-[18]
+[]
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.wfscent" object="wfscent" pos="98,387" tag="9" shortname="wfscent" pixmap="wfscent.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[25]" connectfrom="[7]" textcol="red" idstr="a">
+<simulationObject cpu="(1, 1)" import="science.wfscent" object="wfscent" pos="102,400" tag="9" shortname="wfscent" pixmap="wfscent.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[25]" connectfrom="[7]" textcol="red" idstr="a">
 <lines>
 [
 [],
@@ -94,7 +76,7 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.darcsim" object="Darc" pos="116,525" tag="11" shortname="darc" pixmap="xinterp_recon.xpm" feedback="1" pyname="" groupshare="0" args="" connectto="[28]" connectfrom="[25]" textcol="red" idstr="darc">
+<simulationObject cpu="(1, 1)" import="science.darcsim" object="Darc" pos="120,538" tag="11" shortname="darc" pixmap="xinterp_recon.xpm" feedback="1" pyname="" groupshare="0" args="" connectto="[28]" connectfrom="[25]" textcol="red" idstr="darc">
 <lines>
 [
 [],
@@ -112,7 +94,7 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.science" object="science" pos="168,227" tag="13" shortname="science" pixmap="sci.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[]" connectfrom="[3]" textcol="red" idstr="auncorr">
+<simulationObject cpu="(1, 1)" import="science.science" object="science" pos="172,240" tag="13" shortname="science" pixmap="sci.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[]" connectfrom="[3]" textcol="red" idstr="auncorr">
 <lines>
 [
 ]
@@ -129,7 +111,7 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.science" object="science" pos="335,225" tag="14" shortname="science" pixmap="sci.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[]" connectfrom="[4]" textcol="red" idstr="buncorr">
+<simulationObject cpu="(1, 1)" import="science.science" object="science" pos="339,238" tag="14" shortname="science" pixmap="sci.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[]" connectfrom="[3]" textcol="red" idstr="buncorr">
 <lines>
 [
 ]
@@ -146,7 +128,7 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.science" object="science" pos="168,383" tag="15" shortname="science" pixmap="sci.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[]" connectfrom="[7]" textcol="red" idstr="a">
+<simulationObject cpu="(1, 1)" import="science.science" object="science" pos="172,396" tag="15" shortname="science" pixmap="sci.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[]" connectfrom="[7]" textcol="red" idstr="a">
 <lines>
 [
 ]
@@ -163,7 +145,7 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.science" object="science" pos="344,385" tag="16" shortname="science" pixmap="sci.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[]" connectfrom="[18]" textcol="red" idstr="b">
+<simulationObject cpu="(1, 1)" import="science.science" object="science" pos="348,398" tag="16" shortname="science" pixmap="sci.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[]" connectfrom="[7]" textcol="red" idstr="b">
 <lines>
 [
 ]
@@ -180,7 +162,7 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.xinterp_dm" object="dm" pos="250,321" tag="18" shortname="xdm" pixmap="xinterp_dm.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[16]" connectfrom="[22, 28]" textcol="red" idstr="dmb">
+<simulationObject cpu="(1, 1)" import="science.zdm" object="dm" pos="95,251" tag="21" shortname="zdm" pixmap="glao_zdm.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[7]" connectfrom="[3, 28]" textcol="red" idstr="tta">
 <lines>
 [
 [],
@@ -189,7 +171,7 @@
 <endlines>
 [
 [],
-[(212, 644), (212, 277)],
+[(30, 655), (35, 220)],
 ]
 </endlines>
 <parentNames>
@@ -199,46 +181,8 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="science.zdm" object="dm" pos="91,238" tag="21" shortname="zdm" pixmap="glao_zdm.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[7]" connectfrom="[3, 28]" textcol="red" idstr="tta">
-<lines>
-[
-[],
-]
-</lines>
-<endlines>
-[
-[],
-[(26, 642), (31, 207)],
-]
-</endlines>
-<parentNames>
-['', '']
-</parentNames>
-<sharedTo>
-[22]
-</sharedTo>
-</simulationObject>
-<simulationObject cpu="(1, 1)" import="science.zdm" object="dm" pos="254,235" tag="22" shortname="zdm" pixmap="glao_zdm.xpm" feedback="0" pyname="" groupshare="0" args="" connectto="[18]" connectfrom="[4, 28]" textcol="red" idstr="ttb">
-<lines>
-[
-[],
-]
-</lines>
-<endlines>
-[
-[],
-[(202, 638), (207, 196)],
-]
-</endlines>
-<parentNames>
-['', '']
-</parentNames>
-<sharedTo>
-[]
-</sharedTo>
-</simulationObject>
-<groupShare idstr="0,1,2" cpu="[]" coordlist="[(36, 17), (130, 17), (130, 113), (36, 113)]"/>
-<simulationObject cpu="(1, 1)" import="predarc" object="Predarc" pos="122,453" tag="25" shortname="predarc" pixmap="" feedback="0" pyname="" groupshare="0" args="" connectto="[11]" connectfrom="[9]" textcol="white" idstr="">
+<groupShare idstr="0,1,2" cpu="[]" coordlist="[(40, 30), (134, 30), (134, 126), (40, 126)]"/>
+<simulationObject cpu="(1, 1)" import="predarc" object="Predarc" pos="126,466" tag="25" shortname="predarc" pixmap="" feedback="0" pyname="" groupshare="0" args="" connectto="[11]" connectfrom="[9]" textcol="white" idstr="">
 <lines>
 [
 [],
@@ -256,13 +200,11 @@
 []
 </sharedTo>
 </simulationObject>
-<simulationObject cpu="(1, 1)" import="postdarc" object="Postdarc" pos="114,599" tag="28" shortname="postdarc" pixmap="" feedback="0" pyname="" groupshare="0" args="" connectto="[7, 21, 22, 18]" connectfrom="[11]" textcol="white" idstr="">
+<simulationObject cpu="(1, 1)" import="postdarc" object="Postdarc" pos="118,612" tag="28" shortname="postdarc" pixmap="" feedback="0" pyname="" groupshare="0" args="" connectto="[7, 21]" connectfrom="[11]" textcol="white" idstr="">
 <lines>
 [
-[(36, 637), (41, 287)],
-[(26, 642), (31, 207)],
-[(202, 638), (207, 196)],
-[(212, 644), (212, 277)],
+[(40, 650), (45, 300)],
+[(30, 655), (35, 220)],
 ]
 </lines>
 <endlines>
