@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<aosim>
+<author name="agb"/>
+<created date="140725"/>
+<comment>
+Try changing:
+Number of layers (and number reconstructed).
+Heights of layers.
+npup/pixel scale.
+
+Default batch:  0, good atmosphere
+
+b%3 for atmospheres - good, median, bad.
+
+
+</comment>
+<module name="globals">
+<variables>
+<var type="s" name="fpDataType" value="d"/>
+<var comment="time step" type="eval" name="tstep" value="1./500"/>
+<var name="fifoDelay" type="i" value="1"/>
+<var comment="port number for connections" type="i" name="testrunport" value="9000"/>
+<var name="nice" type="i" value="0"/>
+<var type="f" name="telDiam" value="10.2"/>
+<var comment="telescope secondary diameter" type="eval" name="telSec" value="telDiam/10."/>
+<var name="wfs_sig" type="f" value="100."/>
+<var name="subpxlInterp" type="i" value="1"/>
+<var name="ncpu" type="i" value="2"/>
+<var type="i" name="npup" value="240"/>
+<var type="copy" name="ntel" value="npup"/>
+<var name="wfs_nsubx" type="i" value="20"/>
+<var name="wfs_n" type="eval" value="npup/wfs_nsubx"/>
+<var name="wfs_nfft" type="eval" value="wfs_n*2"/>
+<var name="wfs_clipsize" type="eval" value="wfs_nfft"/>
+<var name="wfs_nimg" type="eval" value="wfs_n"/>
+<var name="wfs_ncen" value="wfs_nimg" type="eval"/>
+<var name="spotpsf" type="code">
+import util.centroid
+spotpsf=util.centroid.createAiryDisc(wfs_nfft,wfs_nfft/8.,0.5,0.5).astype(numpy.float32)#Chosen so that images look similar to canary ones (spot patterns)
+</var>
+<var name="nAct" type="eval" value="21"/>
+
+<var name="sciLam" type="f" value="1650"/>
+<var name="wfslam" type="f" value="700"/>
+<var name="nlayers" type="i" value="10"/>
+<var type="eval" name="r0" value="{0:0.16,1:0.12,2:0.085}[(this.batchno)%3]"/>
+<var type="f" name="l0" value="10.0"/>
+<var name="hlist" type="eval" value="range(0,10000,1000)"/>
+<var name="strList" type="eval" value="[0.5,0.2,0.1,.1,.001,.001,.2,.001,.1,.05][:nlayers]"/>
+<var name="dirn" type="eval" value="range(0,100,10)"/>
+<var name="speed" type="eval" value="[5.,6.,7.,8.,9.,10.,10.,10.,10.,10.]"/>
+<var name="seed" type="eval" value="range(1,11)"/>
+<var name="atmosGeom" type="code">
+from util.atmos import geom,layer,source
+d={}
+for i in range(nlayers):
+ d["L%d"%i]=layer(hlist[i],dirn[i],speed[i],strList[i],seed[i])
+atmosGeom=geom(d,
+               [
+	        source('a',0.,0.,-1,wfs_nsubx,wfslam,reconList=["darc"]),
+	        source('b',0.,0.,-1,None,sciLam,phslam=wfslam),
+	       ],
+	       ntel,npup,telDiam,r0,l0
+	      )
+</var>
+<var name="dmObj" comment="dm object" type="code">
+from util.dm import dmOverview,dmInfo,calcActuators
+all=['a','b']
+actoffset=0.
+pokespacing=None
+actSpacing=None
+
+actFromList=[]
+dmInfoList=[]
+dmInfoList.append(dmInfo('dm',all,0.,nAct,minarea=0.1,closedLoop=0,actSpacing=actSpacing,reconLam=wfslam,gainAdjustment=1.,actuatorsFrom="darc",reconstructList="all",pokeSpacing=pokespacing,interpType="pspline",maxActDist=1.))
+dmInfoList.append(dmInfo('tt',all,0.,3,minarea=0.1,closedLoop=1,zonalDM=0,reconLam=wfslam,gainAdjustment=0.1,actuatorsFrom="darc"))
+dmObj=dmOverview(dmInfoList,
+		  atmosGeom)
+</var>
+
+<var comment="We compute science parameters everry scinSamp iterations" type="i" name="scinSamp" value="5"/>
+<var comment="Simulation exposure time in seconds" type="f" name="AOExpTime" value="0."/>
+<var comment="Current simulation time" type="f" name="simulationTime" value="0.0"/>
+<var name="wfs_minarea" type="f" value="0.5" comment="min unvignetted subap area to use"/>
+<var comment="Telescope pupil function" type="code" name="pupil">
+import util.tel
+pupil=util.tel.Pupil(npup,ntel/2,ntel/2*telSec/telDiam)#,wfs_nsubx,wfs_minarea)
+</var>
+<var type="code" name="scrnScale">
+scrnScale=this.globals.telDiam/float(this.globals.ntel)
+</var>
+<var name="calsource" type="i" value="0"/>
+<var name="timing" type="i" value="0"/>
+<var name="wfs_int" value="tstep" type="eval" comment="integration time"/>
+<var name="wfs_lat" value="0.0" type="f" comment="latency for integ time"/>
+<var name="wfs_read_mean" value="0.0" type="f" comment="WFS Read noise (e-)"/>
+<var name="wfs_read_sigma" value="0." type="f" comment="WFS Read noise (e-)"/>
+<var name="wfs_floor" value="0." type="eval" comment="WFS Read noise (e-)"/>
+<vr name="wfs_floor" value="wfs_read_mean+1*wfs_read_sigma" type="eval" comment="WFS Read noise (e-)"/>
+<vr name="subflag" type="eval" value="pupil.subflag"/>
+<var type="i" name="wfs_bandwidth" value="300"/>
+<var type="f" name="wfs_thruput" value="0.4" comment="including QE"/>
+<var type="f" name="wfs_phot_rate_factor" value="700."/>
+<var type="f" name="wfs_mag" value="6.0"/>
+<var name="wfs_skybrightness" type="f" value="0."/>
+<vr name="actCoupling" type="f" value="0.1"/>
+<vr name="actFlattening" type="f" value="1."/>
+<var name="dmInterpType" type="string" value="spline"/>
+<var name="nthreads" type="s" value="all"/>
+</variables>
+</module>
+
+
+
+<module name="infAtmos">
+<variables>
+<var type="string" name="dataType" value="d"/>
+</variables>
+</module>
+
+<module name="infScrn">
+<variables>
+<var type="string" name="dataType" value="d"/>
+<var comment="random seed" type="eval" name="seed" value="None"/>
+</variables>
+</module>
+
+
+<module name="wfscent">
+<variables>
+<var name="fpDataType" type="eval" value="numpy.float32"/>
+<var name="threshType" type="i" value="0"/>
+<var name="subtractTipTilt" value="0" type="i"/>
+<var name="imageOnly" value="2" type="i"/>
+</variables>
+</module>
+
+
+<module name="science">
+<variables>
+<var type="eval" name="simFilename" value="None"/>
+<var type="i" name="science_integrate" value="1"/>
+<var type="i" name="science_calcRMS" value="1"/>
+<var type="i" name="zero_science" value="10"/>
+<var type="eval" name="hist_list_size" value="100"/>
+<var type="eval" name="fitsFilename" value="None"/>
+<var name="scicsvFilename" value="'res1/results%d.csv'%this.batchno" type="eval"/>
+<var name="sourceLam" type="copy" value="sciLam"/>
+<vr type="eval" name="scinfft" comment="to give 0.05 arcsec/pxl..."
+    value="int(sciLam*1e-9/telDiam*180*3600/numpy.pi/0.05*npup*2)/4*4"/>
+<var name="scinfft" type="eval" value="npup*2"/>
+<var type="eval" name="scinimg" value="scinfft"/>
+<var name="fpDataType" type="s" value="f"/>
+<var name="inboxDiamList" type="eval" value="[0.5,0.2,0.1]"/>
+<var name="usedmpup" type="i" value="0"/>
+</variables>
+</module>
+
+<module name="science_auncorr">
+<variables>
+<var name="sciPath" type="s" value="a"/>
+</variables>
+</module>
+<module name="science_buncorr">
+<variables>
+<var name="sciPath" type="s" value="b"/>
+</variables>
+</module>
+
+<module name="predarc">
+<variables>
+<var name="readnoise" type="eval"
+     value="[0.1]"/>
+<var name="background" type="eval" value="[0.]"/>
+<var name="npxlxDarc" type="eval" value="[240]"/>
+</variables>
+</module>
+
+<module name="darcsim">
+<variables>
+<var name="useExistingDarc" type="i" value="1"/>
+<var name="npxlx" type="eval" value="240**2"/>
+<var name="npxly" type="eval" value="1"/>
+<var name="npxlsDarc" type="eval" value="240**2"/>
+<var name="nactsDarc" type="i" value="375"/>
+</variables>
+</module>
+
+</aosim>

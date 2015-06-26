@@ -1,0 +1,64 @@
+#mpirun -np 1 -hostlist n1-c437  /usr/local/bin/mpipython $PWD/thisfile.py
+#Python code created using the simulation setup GUI...
+#Order of execution may not be quite optimal - you can always change by hand
+#for large simulations - typically, the order of sends and gets may not be
+#quite right.  Anyway, enjoy...
+import numpy
+import util.Ctrl
+import base.mpiGet
+import base.mpiSend
+import base.shmGet
+import base.shmSend
+import Scientific.MPI
+import science.infAtmos
+import science.xinterp_dm
+import science.wfscent
+import science.darcsim
+import science.science
+import science.zdm
+import predarc
+import postdarc
+import science.infScrn
+ctrl=util.Ctrl.Ctrl(globals=globals())
+print "Rank %d imported modules"%ctrl.rank
+#Set up the science modules...
+newMPIGetList=[]
+newMPISendList=[]
+newSHMGetList=[]
+newSHMSendList=[]
+infAtmosList=[]
+dmList=[]
+wfscentList=[]
+DarcList=[]
+scienceList=[]
+PredarcList=[]
+PostdarcList=[]
+infScrnList=[]
+#Add any personal code after this line and before the next, and it won't get overwritten
+if ctrl.rank==0:
+    PostdarcList.append(postdarc.Postdarc(None,ctrl.config,args={},idstr=None))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L0"))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L1"))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L2"))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L3"))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L4"))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L5"))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L6"))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L7"))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L8"))
+    infScrnList.append(science.infScrn.infScrn(None,ctrl.config,args={},idstr="L9"))
+    infAtmosList.append(science.infAtmos.infAtmos({"L0":infScrnList[0],"L1":infScrnList[1],"L2":infScrnList[2],"L3":infScrnList[3],"L4":infScrnList[4],"L5":infScrnList[5],"L6":infScrnList[6],"L7":infScrnList[7],"L8":infScrnList[8],"L9":infScrnList[9],},ctrl.config,args={},idstr="a"))
+    scienceList.append(science.science.science(infAtmosList[0],ctrl.config,args={},idstr="auncorr"))
+    dmList.append(science.zdm.dm({"1":infAtmosList[0],"2":PostdarcList[0],},ctrl.config,args={},idstr="tta"))
+    dmList.append(science.xinterp_dm.dm({"1":dmList[0],"2":PostdarcList[0],},ctrl.config,args={},idstr="dma"))
+    wfscentList.append(science.wfscent.wfscent(dmList[1],ctrl.config,args={},idstr="a"))
+    PredarcList.append(predarc.Predarc({"a":wfscentList[0],},ctrl.config,args={},idstr=None))
+    DarcList.append(science.darcsim.Darc({"a":PredarcList[0],},ctrl.config,args={},idstr="darc"))
+    scienceList.append(science.science.science(dmList[1],ctrl.config,args={},idstr="a"))
+    scienceList.append(science.science.science(dmList[1],ctrl.config,args={},idstr="b"))
+    scienceList.append(science.science.science(infAtmosList[0],ctrl.config,args={},idstr="buncorr"))
+    PostdarcList[0].newParent(DarcList[0],None)
+    execOrder=[PostdarcList[0],infScrnList[0],infScrnList[1],infScrnList[2],infScrnList[3],infScrnList[4],infScrnList[5],infScrnList[6],infScrnList[7],infScrnList[8],infScrnList[9],infAtmosList[0],scienceList[0],dmList[0],dmList[1],wfscentList[0],PredarcList[0],DarcList[0],scienceList[1],scienceList[2],scienceList[3],]
+    ctrl.mainloop(execOrder)
+print "Simulation finished..."
+#Add any personal code after this, and it will not get overwritten

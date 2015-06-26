@@ -1,0 +1,119 @@
+<!--
+darc, the Durham Adaptive optics Real-time Controller.
+Copyright (C) 2010 Alastair Basden.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<displayset date="09/09/18 22:56:09/18/09">
+<plot pos="(0, 0)" size="(493, 400)" show="0" tbVal="(0,0,0,0,0,0)"><mangle>debug=1
+tbNames=["Coeffs","Zernike","Spline","1D actuators","Text","Acts as Volts"]
+if data.shape not in [(375,)]:
+ print "Error - expecting 375 actuators got %s"%str(data.shape)
+nmodes=45
+asdac=0
+tt=data[-2],data[-1]
+if not store.has_key("z"):#do the setup...
+ print "Setting up..."
+ import tel
+ import zernike
+ store["pupfn"]=tel.Pupil(21,11,0).fn.astype(numpy.int32)
+ store["actmap"]=numpy.zeros((21,21),numpy.float32)
+ store["z"]=zernike.Zernike(store["pupfn"],nmodes)
+ size=21*8
+ store["out"]=numpy.zeros((size,size),numpy.float32)
+ store["bigpfn"]=tel.Pupil(size,size/2,0).fn.astype(numpy.int32)
+ store["ztt"]=zernike.Zernike(tel.Pupil(int(size*0.18),int(size*0.18)/2,0).fn.astype(numpy.int32),3)
+ store["ttscale"]=numpy.max(store["ztt"].zern[1]+store["ztt"].zern[2])
+z=store["z"]
+ttscale=store["ttscale"]
+bigpfn=store["bigpfn"]
+ztt=store["ztt"]
+actmap=store["actmap"]
+pupfn=store["pupfn"]
+out=store["out"]
+import overlayMaker
+if tbVal[0]:#plot the zernike coeffiecients
+ numpy.put(actmap,numpy.nonzero(pupfn.ravel())[0],data[:373]-data[:373].sum()/373.)
+ data=z.calcZernikeCoeff(actmap)
+ title="Zernike coefficients"
+ tbVal[1]=0
+ tbVal[2]=0
+elif tbVal[1]:#plot a reconstructed zernike
+ tbVal[0]=0
+ tbVal[2]=0
+ numpy.put(actmap,numpy.nonzero(pupfn.ravel())[0],data[:373]-data[:373].sum()/373.)
+ coeff=z.calcZernikeCoeff(actmap)
+ ttdata=ztt.zern[1]*tt[0]+ztt.zern[2]*tt[1]
+ rnge=numpy.max(data[:373])-numpy.min(data[:373])#:52 added June 2014.
+ out[:]=0
+ data=z.zernikeReconstruct(coeff,out)
+ maxi=numpy.max(data)
+ if maxi!=0:
+  data/=maxi
+ title="Zernike reconstruction"
+ #now inset the tip-tilt...
+ data[-ttdata.shape[0]:,-ttdata.shape[1]:]+=ttdata*rnge/ttscale/10.
+elif tbVal[2]:#plot a cubic spline fit.
+ tbVal[0]=0
+ tbVal[1]=0
+ numpy.put(actmap,numpy.nonzero(pupfn.ravel())[0],data[:373]-data[:373].sum()/373.)
+ data=overlayMaker.createSplineOverlay(actmap,out)*bigpfn
+ #now inset the tip-tilt...
+ title="Cubic spline interpolation"
+ ttdata=ztt.zern[1]*tt[0]+ztt.zern[2]*tt[1]
+ rnge=numpy.max(data)-numpy.min(data)
+ data[-ttdata.shape[0]:,-ttdata.shape[1]:]+=ttdata*rnge/ttscale
+elif tbVal[3]:
+ pass
+elif tbVal[4]:
+ txt=""
+ numpy.put(actmap,numpy.nonzero(pupfn.ravel())[0],data[:373])#don't subtract average
+ if asdac==0:
+  for i in range(21):
+   for j in range(21):
+    txt+="%8.2f "%actmap[i,j]
+   txt+="\n"
+  if data.size>373:
+   txt+="\n%8.2f %8.2f\n"%(data[373],data[374])
+ else:
+  for i in range(21):
+   for j in range(21):
+    txt+="%5d "%actmap[i,j]
+   txt+="\n"
+  if data.size>373:
+   txt+="\n%5d %5d\n"%(data[373],data[374])
+ data=txt
+ fount="Mono 9"
+else:
+ numpy.put(actmap,numpy.nonzero(pupfn.ravel())[0],data[:373]-data[:373].sum()/373.)
+ data=actmap
+ title="Reconstructed phase map"
+if type(data)!=type("") and len(data.shape)==2:
+ arrows=[]
+ if data.shape[0]==21:
+  xpos=7
+  ypos=0
+ else:
+  xpos=60
+  ypos=4
+ if tt[0]!=0:
+  w=tt[0]*.3*data.shape[0]/16.
+  arrows.append([xpos,ypos,tt[0]*data.shape[0]/16.,0,{"head_width":w,"head_length":w,"length_includes_head":True,"fc":"red","ec":"red"}])
+ if tt[1]!=0:
+  w=tt[1]*.3*data.shape[0]/16.
+  arrows.append([xpos,ypos,0,tt[1]*data.shape[0]/16.,{"head_width":w,"head_length":w,"length_includes_head":True,"fc":"red","ec":"red"}])
+</mangle>
+<sub>[('rtcMirrorBuf',1,1)]</sub>
+</plot>
+</displayset>
