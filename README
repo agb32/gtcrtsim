@@ -100,7 +100,7 @@ reconstructor or something.
 
 
 
-So stop:
+To stop:
 darcmagic stop -c
 
 Simulation will then wait for a new darc to reconnect - or you can

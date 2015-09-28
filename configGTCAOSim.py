@@ -249,7 +249,7 @@ centCalBounds=None# [11.54.13]
 # end slope interface
 
 # MVM reconstruction interface [11.55]
-decayFactor=0.99 #used in libreconmvm.so [11.55.1]
+decayFactor=0.99*numpy.ones((nacts,),numpy.float32) #used in libreconmvm.so [11.55.1]
 reconstructMode="simple" #string with value "simple", "truth" , "open" or "offfset" [11.55.3]
 ncents=int(subapFlag.sum()*2)
 v0=numpy.zeros((nacts,),"f") #initial voltages [11.55.5]
