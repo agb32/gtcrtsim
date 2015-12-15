@@ -131,11 +131,11 @@ while len(host)%4!=0:
 
 cameraParams=numpy.zeros((2+len(host)//4,),numpy.int32)
 cameraParams[0]=1#asfloat
-cameraParams[1]=8000#port
+cameraParams[1]=8500#port
 cameraParams[2:]=numpy.fromstring(host,dtype=numpy.int32)
 mirrorParams=numpy.zeros((7+len(host)//4,),"i")
 mirrorParams[0]=1#timeout
-mirrorParams[1]=8000#port on receiver
+mirrorParams[1]=8500#port on receiver
 mirrorParams[2]=1#affin el size
 mirrorParams[3]=1#priority
 mirrorParams[4]=-1#affinity
@@ -250,7 +250,7 @@ centCalBounds=None# [11.54.13]
 
 # MVM reconstruction interface [11.55]
 decayFactor=0.99*numpy.ones((nacts,),numpy.float32) #used in libreconmvm.so [11.55.1]
-reconstructMode="simple" #string with value "simple", "truth" , "open" or "offfset" [11.55.3]
+reconstructMode="truth" #string with value "simple", "truth" , "open" or "offfset" [11.55.3]
 ncents=int(subapFlag.sum()*2)
 v0=numpy.zeros((nacts,),"f") #initial voltages [11.55.5]
 rmx=numpy.zeros((nacts,ncents)).astype("f")#FITS.Read("rmxRTC.fits")[1].transpose().astype("f") [11.55.6]

@@ -145,7 +145,7 @@ scrnScale=this.globals.telDiam/float(this.globals.ntel)
 <var type="i" name="science_calcRMS" value="1"/>
 <var type="i" name="zero_science" value="10"/>
 <var type="eval" name="hist_list_size" value="100"/>
-<var type="eval" name="fitsFilename" value="None"/>
+<var type="eval" name="scifitsFilename" value="'res1/results%d.fits'%this.batchno"/>
 <var name="scicsvFilename" value="'res1/results%d.csv'%this.batchno" type="eval"/>
 <var name="sourceLam" type="copy" value="sciLam"/>
 <vr type="eval" name="scinfft" comment="to give 0.05 arcsec/pxl..."
