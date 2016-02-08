@@ -51,17 +51,34 @@ spotpsf=util.centroid.createAiryDisc(wfs_nfft,wfs_nfft/8.,0.5,0.5).astype(numpy.
 <var name="speed" type="eval" value="[7.5 if (this.batchno)%3!=2 else 10.,12.5 if (this.batchno)%3!=2 else 15.,15. if (this.batchno)%3!=2 else 17.5][:nlayers]"/>
 <var name="layerseed" type="eval" value="[11,12,13][:nlayers]"/>
 <var name="seed" type="i" value="1"/>
+<var name="layerList" type="eval" value="{'allLayers':['L%d'%x for x in range(nlayers)]}"/>
+<var comment="Telescope pupil function" type="code" name="pupil">
+import util.tel
+pupil=util.tel.Pupil(npup,ntel/2,ntel/2*telSec/telDiam)
+</var>
+<var name="sciOverview" type="code">
+import util.sci
+sciOverview=util.sci.sciOverview({
+				  "a":util.sci.sciInfo("a",0.,0.,pupil,wfslam),
+				  "auncorr":util.sci.sciInfo("auncorr",0.,0.,pupil,wfslam,sciPath="a"),
+				  "b":util.sci.sciInfo('b',0.,0.,pupil,sciLam,phslam=wfslam),
+				  "buncorr":util.sci.sciInfo('buncorr',0.,0.,pupil,sciLam,phslam=wfslam,sciPath="b"),
+				  "c":util.sci.sciInfo('c',10.,0.,pupil,sciLam,phslam=wfslam),
+				  })
+</var>
+<var name="wfsOverview" type="code">
+import util.guideStar
+wfsOverview=util.guideStar.wfsOverview({"a":util.guideStar.NGS('a',wfs_nsubx,0.,0.,wfs_n,pupil,sourcelam=wfslam,sig=wfs_sig,reconList=["darc"],spotpsf=spotpsf)})
+</var>
 <var name="atmosGeom" type="code">
 from util.atmos import geom,layer,source
+import util.guideStar
+import util.sci
 d={}
 for i in range(nlayers):
  d["L%d"%i]=layer(hlist[i],dirn[i],speed[i],strList[i],layerseed[i])
 atmosGeom=geom(d,
-               [
-	        source('a',0.,0.,-1,wfs_nsubx,wfslam,reconList=["darc"]),
-	        source('b',0.,0.,-1,None,sciLam,phslam=wfslam),
-	        source('c',10.,0.,-1,None,sciLam),
-	       ],
+               wfsOverview.values()+sciOverview.values(),
 	       ntel,npup,telDiam,r0,l0
 	      )
 </var>
@@ -84,10 +101,6 @@ dmObj=dmOverview(dmInfoList,
 <var comment="Simulation exposure time in seconds" type="f" name="AOExpTime" value="0."/>
 <var comment="Current simulation time" type="f" name="simulationTime" value="0.0"/>
 <var name="wfs_minarea" type="f" value="0.5" comment="min unvignetted subap area to use"/>
-<var comment="Telescope pupil function" type="code" name="pupil">
-import util.tel
-pupil=util.tel.Pupil(npup,ntel/2,ntel/2*telSec/telDiam)#,wfs_nsubx,wfs_minarea)
-</var>
 <var type="code" name="scrnScale">
 scrnScale=this.globals.telDiam/float(this.globals.ntel)
 </var>

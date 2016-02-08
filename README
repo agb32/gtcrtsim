@@ -1,7 +1,7 @@
 To run:
 
 #Start the simulation, which then waits for darc to connect.
-python gtcsim.py
+python gtcsim.py params.py
 (or if you want a faster simulation, use python gtcsim1sci.py - which
 has only 1 science PSF, rather than 4).
 
@@ -104,7 +104,8 @@ To stop:
 darcmagic stop -c
 
 Simulation will then wait for a new darc to reconnect - or you can
-Ctrl-C it.
+Ctrl-C it (the simulation - not darc - since this would only stop the
+control part of darc, not the real-time part - by design!).
 
 
 Useful commands:
@@ -115,6 +116,5 @@ darcmagic time 10
 
 simsetup.py gtcsim.xml to modify the simulation.  e.g....
 
-python gtcsim10layer.py params10layer.xml
-or
 python gtcsim1sci.py params.xml   (which runs faster)
+

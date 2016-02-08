@@ -2,6 +2,7 @@ import sys
 import numpy
 import darc
 import FITS
+import time
 """Basic poke method - probably not what you want for a real AO system.
 
 For a real system, you would want to both push and pull the actuators at the very least.
@@ -32,6 +33,7 @@ for i in range(nacts):
     print "Poking %d"%i
     actuators[i]=32768+pokeval
     d.Set("actuators",actuators)
+    time.sleep(1.5)
     sl=d.SumData("rtcCentBuf",nfr)[0]/nfr/pokeval
     pmx[i]=sl
     actuators[i]=32768
