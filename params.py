@@ -4,7 +4,7 @@ import util.sci
 import util.guideStar
 import util.centroid
 import util.atmos
-from util.dm import dmOverview,dmInfo,calcActuators
+import util.dm
 base.readConfig.init(globals())
 
 tstep=1/500. # Simulation time step (500Hz).
@@ -50,11 +50,11 @@ atmosGeom=util.atmos.geom(layerDict,wfsOverview.values()+sciOverview.values(),np
 
 dmInfoList=[]
 #The DM - which acts in directions a and b.
-dmInfoList.append(dmInfo('dm',["a","b"],height=0.,nact=21,minarea=0.1,actuatorsFrom="darc",reconstructList="all",interpType="pspline",maxActDist=1.))
+dmInfoList.append(util.dm.dmInfo('dm',["a","b"],height=0.,nact=21,minarea=0.1,actuatorsFrom="darc",reconstructList="all",interpType="pspline",maxActDist=1.))
 #The TT mirror - which acts in directions a and b.
-dmInfoList.append(dmInfo('tt',["a","b"],height=0.,nact=3,minarea=0.1,zonalDM=0,actuatorsFrom="darc"))
+dmInfoList.append(util.dm.dmInfo('tt',["a","b"],height=0.,nact=3,minarea=0.1,zonalDM=0,actuatorsFrom="darc"))
 #The DM object.
-dmObj=dmOverview(dmInfoList, atmosGeom)
+dmObj=util.dm.dmOverview(dmInfoList, atmosGeom)
 
 #Values specific to the wfscent module
 this.wfscent=new()
