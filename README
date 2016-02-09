@@ -118,3 +118,8 @@ simsetup.py gtcsim.xml to modify the simulation.  e.g....
 
 python gtcsim1sci.py params.xml   (which runs faster)
 
+Simpler config file: paramsUser.py.  To use this, it must be used with
+paramsMain.py, e.g.:
+python gtcsim.py paramsUser.py paramsMain.py
+
+
