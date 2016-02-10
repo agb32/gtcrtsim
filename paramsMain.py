@@ -34,7 +34,7 @@ layerList={"allLayers":layerDict.keys()} # specify which iscrn object makes whic
 
 #target definitions
 onaxis=[0.,0.] #on-axis direction in polar coords
-offaxis=[10.,0.] # off-axis direction in polar coords (not used in gtcsim.py - try gtcsim2sci.py to have an offaxis target)
+offaxis=[10.,0.] # off-axis direction in polar coords. This isn't used in gtcsim.py - if you want an off-axis source, consider using gtcsim2sci.py.
 fluxlevel=100. # photons/subap/frame (used only in config file)
 spotpsf=createAiryDisc(24,3.,0.5,0.5).astype("f")#Chosen so that images look similar to canary ones (spot patterns)
 
