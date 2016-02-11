@@ -26,7 +26,7 @@ readnoise=this.globals.readnoise
 AOExpTime=0.#continuous simulation (no set number of iterations).
 
 #telescope stuff
-npup=240. # number of phase pixels across telescope pupil.
+npup=240 # number of phase pixels across telescope pupil.
 pupil=Pupil(npup,npup/2,npup/2*telSec/telDiam) # telescope pupil function.  Used only in the config file.
 
 #atmosphere stuff
