@@ -8,7 +8,7 @@ has only 1 science PSF, rather than 4).
 #Now start darc
 darccontrol configGTCAOSim.py -o
 
-The simulation and darc run at about 4Hz on my laptop (darc alone
+The simulation and darc run at about 30Hz on my laptop (darc alone
 reaches over 1000Hz - the simulation slows things down a lot).
 
 #Start a darcplot, and look at things...
