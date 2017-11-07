@@ -9,7 +9,7 @@ import base.mpiGet
 import base.mpiSend
 import base.shmGet
 import base.shmSend
-import Scientific.MPI
+#import Scientific.MPI
 import science.infAtmos
 import science.xinterp_dm
 import science.wfscent
